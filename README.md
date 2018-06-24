@@ -84,7 +84,7 @@ Picture a view set setting up GET and POST handlers for a resource
 `books`. The tests should look like this:
 
 ```python
-# Test at "project_dir/app/tests/integration/books/test_resource.py"
+# Test at "project_dir/app/tests/integration/api/books/test_resource.py"
 from rest_framework.test import APITestCase
 
 
@@ -104,7 +104,7 @@ class TestGet(APITestCase):
 In case of nested resources, e.g. `pages`, it should look like this:
 
 ```python
-# Test at "project_dir/app/tests/integration/books/pages/test_resource.py"
+# Test at "project_dir/app/tests/integration/api/books/pages/test_resource.py"
 from rest_framework.test import APITestCase
 
 
