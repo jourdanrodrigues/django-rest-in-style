@@ -40,8 +40,7 @@ should be distributed into, in files and/or more modules.
 
 #### Function
 
-When writing tests for functions, reproduce the test location and
-class name as the example below:
+Reproduce the test location and class name as the example below:
 
 ```python
 # Function "split_names" at "project_dir/app/utils.py"
@@ -59,8 +58,26 @@ class TestFunction(SimpleTestCase):
 
 #### Class
 
-When writing tests for classes' methods, reproduce the test location
-and class name as the example below:
+Reproduce the test location and class name as the example below:
+
+```python
+# Class "AddressSerializer" at "project_dir/app/serializers.py"
+# Test at "project_dir/app/tests/serializers/test_address_serializer.py"
+from django.test import SimpleTestCase
+
+from app.serializers import AddressSerializer
+
+
+class TestClass(SimpleTestCase):
+    def test_when_instance_is_created_right_properties_are_applied(self):
+        data = {'street': 'Test Aloha'}
+        serializer_instance = AddressSerializer(data=data)
+        # assertions
+```
+
+#### Class' methods
+
+Reproduce the test location and class name as the example below:
 
 ```python
 # Class "Parser", method "to_json" at "project_dir/app/utils.py"
