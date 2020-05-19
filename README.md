@@ -2,8 +2,8 @@
 
 This style guide was built on top of the following versions:
 
-- Django: 2.0.5
-- DRF: 3.8.2
+- Django: 3.0.6
+- DRF: 3.11.0
 
 ## Apps
 
@@ -11,17 +11,17 @@ Your Django app should have 2 "apps" only:
 
 - `core`: Should contain:
   - Settings
-  - Locales (translations)
-  - Source of URLs in settings
   - Overrides of built-in management commands
   - Infrastructure tests (for single server instance)
-  - Helpers and utilities for infrastructure (functions/classes)
+  - Helpers, utilities and global overrides for infrastructure (functions/classes)
 
 - `app`: Should contain:
   - Views
   - Models
   - Serializers
+  - Locales (translations)
   - Routers definitions
+  - Source of URLs in settings
   - Custom management commands
   - Helpers and utilities for application (functions/classes)
 
@@ -32,11 +32,10 @@ from [this article][be-careful-apps-link].
 
 ## Tests
 
-Inside each app, you should have a module named `tests`, and inside
-it you'll have `integration` and `unit` modules, which your tests
-should be distributed into, in files and/or more modules.
-
 ### Unit
+
+Normally, unit tests inherit from "[django.test.SimpleTestCase][simpletestcase-django-doc]", as this class doesn't
+setup a test database
 
 #### Function
 
@@ -95,6 +94,9 @@ class TestToJson(SimpleTestCase):
 
 ### Integration
 
+These can inherit either from "[rest_framework.test.APITestCase][apitestcase-drf-doc]" (for API calls) or
+"[django.test.TestCase][testcase-django-doc]"
+
 #### Web API
 
 Picture a view set setting up GET and POST handlers for a resource
@@ -129,15 +131,18 @@ class TestPatch(APITestCase):
     def test_when_valid_data_is_sent_returns_ok_status(self):
         book_id = 1
         data = # Data to update a page
-        response = self.client.patch('/api/books/{}/pages/'.format(book_id), data)
+        response = self.client.patch(f'/api/books/{book_id}/pages/', data)
         # assertions
 
 
 class TestDelete(APITestCase):
     def test_when_page_exists_returns_no_content_status(self):
         book_id = 1
-        response = self.client.delete('/api/books/{}/pages/'.format(book_id))
+        response = self.client.delete(f'/api/books/{book_id}/pages/')
         # assertions
 ```
 
 [be-careful-apps-link]: https://blog.doordash.com/tips-for-building-high-quality-django-apps-at-scale-a5a25917b2b5
+[simpletestcase-django-doc]: https://docs.djangoproject.com/en/3.0/topics/testing/tools/#simpletestcase
+[testcase-django-doc]: https://docs.djangoproject.com/en/3.0/topics/testing/tools/#testcase
+[apitestcase-drf-doc]: https://www.django-rest-framework.org/api-guide/testing/#api-test-cases
