@@ -142,7 +142,7 @@ class TestDelete(APITestCase):
         # assertions
 ```
 
-[be-careful-apps-link]: https://blog.doordash.com/tips-for-building-high-quality-django-apps-at-scale-a5a25917b2b5
+[be-careful-apps-link]: https://doordash.engineering/2017/05/15/tips-for-building-high-quality-django-apps-at-scale/
 [simpletestcase-django-doc]: https://docs.djangoproject.com/en/3.0/topics/testing/tools/#simpletestcase
 [testcase-django-doc]: https://docs.djangoproject.com/en/3.0/topics/testing/tools/#testcase
 [apitestcase-drf-doc]: https://www.django-rest-framework.org/api-guide/testing/#api-test-cases
