@@ -119,7 +119,7 @@ class TestGet(TestLoggedIn, TestAssertionsMixin):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_when_user_logged_in_has_books_returns_its_books(self):
+    def test_when_user_logged_in_has_books_then_returns_its_books(self):
         response = self.client.get(f'/api/users/{self.user.id}/books/')
         self.assertBookData(response, self.book)
 ```
@@ -185,7 +185,7 @@ class TestGet(APITestCase):
             [status.HTTP_401_UNAUTHORIZED, expected_data],
         )
 
-    def test_when_user_logged_in_has_books_returns_its_books(self):
+    def test_when_user_logged_in_has_books_then_returns_its_books(self):
         # Arrange
         user = UserFactory()
         book = BookFactory()
@@ -293,7 +293,7 @@ from app.utils import split_names
 
 
 class TestFunction(SimpleTestCase):
-    def test_when_string_without_spaces_is_sent_returns_list_with_one_element(self):
+    def test_when_string_without_spaces_is_sent_then_returns_list_with_one_element(self):
         value = split_names('string')
 
         self.assertListEqual(value, ['string'])
