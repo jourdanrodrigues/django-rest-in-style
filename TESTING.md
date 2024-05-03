@@ -219,18 +219,16 @@ Normally, unit tests inherit from [`django.test.SimpleTestCase`][simpletestcase-
 
 The folder structure for the tests below should be as follows:
 
-```
-project_dir/
-├── app/
-│   ├── utils.py
-│   ├── serializers.py
-│   ├── tests/
-│   │   ├── utils/
-│   │   │   ├── test_split_names.py
-│   │   │   ├── test_parser.py
-│   │   ├── serializers/
-│   │   │   ├── test_address_serializer.py
-```
+    project_dir/
+    └── app/
+        ├── utils.py
+        ├── serializers.py
+        └── tests/
+            ├── utils/
+            │   ├── test_split_names.py
+            │   └── test_parser.py
+            └── serializers/
+                └── test_address_serializer.py
 
 ### Testing functions and classes
 
@@ -330,17 +328,17 @@ That way, any payload changes will be caught by the tests and will have to be in
 The whole test structure for the examples above should be:
 
     project_dir/
-    ├── app/
-    │   ├── factories.py
-    │   ├── models.py
-    │   ├── serializers.py
-    │   ├── tests/
-    │   │   ├── endpoints/
-    │   │   │   ├── api/
-    │   │   │   │   ├── books/
-    │   │   │   │   │   ├── test_resource.py
-    │   │   │   │   │   ├── pages/
-    │   │   │   │   │   │   ├── test_resource.py
+    └── app/
+        ├── factories.py
+        ├── models.py
+        ├── serializers.py
+        └── tests/
+            └── endpoints/
+                └── api/
+                    └── books/
+                        ├── test_resource.py
+                        └── pages/
+                            └── test_resource.py
 
 ```python
 # Tests for "GET /api/books/" and "POST /api/books/"
