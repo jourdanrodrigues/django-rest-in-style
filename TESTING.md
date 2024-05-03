@@ -9,6 +9,8 @@
   - [Testing functions and classes](#testing-functions-and-classes)
 - [Integration](#integration)
   - [Web API](#web-api)
+    - [Full payload test](#full-payload-test)
+    - [Query count test](#query-count-test)
 
 ## Test naming
 
@@ -330,15 +332,95 @@ class TestToJson(SimpleTestCase):
 
 ## Integration
 
-These can inherit either from "[rest_framework.test.APITestCase][apitestcase-drf-doc]" (for API calls) or
-"[django.test.TestCase][testcase-django-doc]"
+These can inherit either from [`django.test.TestCase`][testcase-django-doc] or
+[`rest_framework.test.APITestCase`][apitestcase-drf-doc] for API calls.
 
 ### Web API
 
-In terms of folder structure, I recommend putting endpoint tests under an `endpoints` folder and have the folder
-structure mimic the endpoint path, with a `test_resource.py` file to hold the tests for that endpoint.
+#### Full payload test
 
-Naming here is totally flexible, go with what works best for you.
+It's crucial to maintain the API contract via tests. To achieve that, try to include at least one test per endpoint that
+asserts the entire payload returned by the API. This safeguards against potential discrepancies like:
+
+- Returning more data than expected
+- Presenting data in an unexpected format
+- Altering the order of elements
+- Omitting information
+
+```python
+from rest_framework.test import APITestCase
+from rest_framework import status
+from app.factories import UserFactory, TokenFactory
+
+
+class TestGet(APITestCase):
+    def test_that_it_returns_expected_response(self):
+        user = UserFactory()
+        token = TokenFactory(user=user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token.value}")
+
+        response = self.client.get("/api/users/me/")
+
+        expected_data = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            # No password hash
+            "permissions": user.get_permissions(),
+            "is_staff": user.is_staff,
+            "is_active": user.is_active,
+            "date_joined": user.date_joined.isoformat().replace('+00:00', 'Z'),
+            "last_login": user.last_login.isoformat().replace('+00:00', 'Z'),
+        }
+        self.assertListEqual(
+            [response.status_code, response.data],
+            [status.HTTP_200_OK, expected_data],
+        )
+```
+
+#### Query count test
+
+Django's ORM is very powerful but can be tricky to use correctly when dealing with larger datasets. More often than not,
+the endpoints will return the correct data but will run into an exponential query issue.
+
+In this test case, a larger amount of data should be created to make sure any query issues are exposed.
+
+This is supposed to be the heaviest test cases and should ideally be only one per endpoint.
+
+Can be also worth to check for the response status code to make sure the request actually worked.
+
+```python
+from rest_framework.test import APITestCase
+from app.factories import UserFactory, TokenFactory, BookFactory
+
+
+class TestGet(APITestCase):
+    def test_that_it_performs_expected_query_count(self):
+        for user in UserFactory.create_batch(20):
+            books = BookFactory.create_batch(5, user=user)
+            user.books.add(*books)
+
+        with self.assertNumQueries(2):
+            """
+            Captured queries were:
+            1. SELECT "users_user".* FROM "users_user" WHERE "users_user"."id" = 1
+            2. SELECT "books_book".* FROM "books_book" WHERE "books_book"."user_id" in (1)
+            """
+            self.client.get("/api/users/")
+```
+
+A good practice is to run this test with 0 queries, let the test fail and then adjust the number of queries to the
+correct number, also picking up the queries ran in the message log and placing as a message next to the assertion.
+
+There's a valid concern about this becoming outdated as developers are lazy. Creating an abstraction to check for the
+actual queries might be worthwhile.
+
+#### Folder structure
+
+This is a personal preference area regarding naming. Endpoint tests should go under an `endpoints` folder and have the
+endpoint path be mimicked by the folder structure, with a `test_resource.py` file to hold the tests for that endpoint.
 
 In order to maintain the API contract, it's recommended to have at one test checking for the entire payload per endpoint.
 This is to ensure that the API is not returning:
