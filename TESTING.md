@@ -12,22 +12,32 @@
 
 ## Test names
 
-Test names should follow the "proposition" pattern: `test_when_["and" conditions]_then_[expected result]`.
+Test names should be written as a proposition and should be readable as a sentence (as much as possible).
 
-As a side effect, propositions should enforce the pattern of only one assertion per test.
+Default behaviors or no conditions should be `test_that_it_[expected outcome]`, e.g.:
+`test_that_it_saves_the_user`.
 
-Each test should assert "and" conditions only. The "or" conditions should always be asserted in a different test.
+"And" conditions should be `test_when_["and" conditions]_then_[expected outcome]`, e.g.:
+`test_when_active_flag_is_true_and_user_has_access_then_returns_active_users`.
+
+Each test should assert "and" conditions only. The "or" conditions are represented by multiple tests. See the example below:
+
+```
+test_when_active_flag_is_true_then_returns_active_users
+
+test_when_active_flag_is_not_set_then_returns_active_users
+```
+
 
 ## Test assertions
 
-Tests should only have one assertion.
+Tests should only have one assertion. This is a side effect of using propositions as a naming convention.
 
-If the test is asserting a single concept that requires multiple assertions, then go for it but having multiple
+If the test is asserting a single concept that requires multiple assertions then go for it, but having multiple
 assertions potentially requires multiple runs to fully fix a broken test.
 
-Bundling the assertions in a single `assertListEqual`, `assertDictEqual` etc. call is an acceptable way to break this rule.
-
-Assertion abstractions should be based on this. Here's an example of a very common assertion abstraction:
+Bundling assertions in a single call of `assertListEqual`, `assertDictEqual` etc. is an acceptable way to break this rule
+and this is what assertion abstractions should be based on. Here's an example of a very common assertion abstraction:
 
 ```python
 import json
@@ -38,7 +48,7 @@ from rest_framework.response import Response
 from rest_framework.test import APITestCase as DRFAPITestCase
 
 
-def extract_response_data(response: Response):
+def _extract_response_data(response: Response):
     """
     Extracts a diff-friendly response data from a DRF Response object.
     """
@@ -50,7 +60,7 @@ def extract_response_data(response: Response):
 class APITestCase(DRFAPITestCase):
     def assertResponse(self, response: Response, status_code: int, expected_data) -> None:
         self.assertListEqual(
-            [response.status_code, extract_response_data(response)],
+            [response.status_code, _extract_response_data(response)],
             [status_code, expected_data],
         )
 
