@@ -387,7 +387,7 @@ the endpoints will return the correct data but will run into an exponential quer
 
 In this test case, a larger amount of data should be created to make sure any query issues are exposed.
 
-This is supposed to be the heaviest test cases and should ideally be only one per endpoint.
+These are supposed to be the heaviest test cases and there should ideally be only one per endpoint.
 
 Can be also worth to check for the response status code to make sure the request actually worked.
 
