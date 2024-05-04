@@ -419,17 +419,14 @@ actual queries might be worthwhile.
 
 #### Folder structure
 
-This is a personal preference area regarding naming. Endpoint tests should go under an `endpoints` folder and have the
-endpoint path be mimicked by the folder structure, with a `test_resource.py` file to hold the tests for that endpoint.
+Endpoint tests should live under an `endpoints` folder and have the endpoint path be mimicked by the folder structure,
+with a `test_resource.py` file to hold the tests for that endpoint. Naming is a matter of preference.
 
-In order to maintain the API contract, it's recommended to have at one test checking for the entire payload per endpoint.
-This is to ensure that the API is not returning:
-- more data than expected;
-- data in a different format;
-- data in a different order;
-- with missing data.
+This approach detaches the tests from the actual code, which is good since these are integration tests, and should make
+it easier to spot endpoints not covered by tests.
 
-That way, any payload changes will be caught by the tests and will have to be intentionally changed.
+A valid concern for this is that one would lose track of which endpoint handlers are tested. This should be mitigated
+by having an easily accessible test coverage report.
 
 The whole test structure for the examples above should be:
 
@@ -445,6 +442,16 @@ The whole test structure for the examples above should be:
                         ├── test_resource.py
                         └── pages/
                             └── test_resource.py
+
+In order to maintain the API contract, it's recommended to have at least one test case asserting for the entire payload
+per endpoint. This is to ensure that the API endpoints are not returning:
+
+- more data than expected;
+- data in a different format;
+- data in a different order;
+- with missing data.
+
+That way, any payload changes will be caught by the tests and will have to be intentionally changed.
 
 ```python
 # Tests for "GET /api/books/" and "POST /api/books/"
