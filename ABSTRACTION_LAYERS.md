@@ -86,8 +86,8 @@ seem to belong.
 ## Model Managers
 
 Model Managers should be kept in the `models.py` file (or module) of your `app`. Overriding the default manager should
-only happen when there's a need to have a custom method to write data to the database. An example bundled within Django
-is the user manager, which has a `create_user` method.
+happen when there's a need to have a custom method to write data to the database or when an annotation needs to happen
+by default. An example bundled within Django is the user manager, which has a `create_user` method.
 
 ## QuerySets
 
