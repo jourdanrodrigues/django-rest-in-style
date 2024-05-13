@@ -2,9 +2,11 @@
 
 This is a guide to help you write Django REST applications from small to large scale.
 
-See project structure [here](./PROJECT_STRUCTURE.md).
-See abstraction layers [here](./ABSTRACTION_LAYERS.md).
-See testing guidelines [here](./TESTING.md).
+See [project structure](./PROJECT_STRUCTURE.md).
+
+See [abstraction layers](./ABSTRACTION_LAYERS.md).
+
+See [testing guidelines](./TESTING.md).
 
 ## About Django Apps
 
