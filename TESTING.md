@@ -196,7 +196,7 @@ class TestGet(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.value}')
 
         # Act
-        response = self.client.get(f'/api/users/{book.id}/books/')
+        response = self.client.get(f'/api/users/{user.id}/books/')
 
         # Assert
         book_data = {
