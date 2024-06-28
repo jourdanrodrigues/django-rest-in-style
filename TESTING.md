@@ -242,13 +242,12 @@ use of the test database.
 
 ### Testing functions and classes
 
-Each function should have a test of its own called `Test<Function>` and each class method should have a test of its own
-called `Test<Class>`.
+Each function (or method) should have a test class of its own called `Test<Function>`.
 
 Underscores (`_`) should not be taking into account for test names (e.g. testing `__init__` would have `TestInit`).
 
-Any class, method or function beginning with a single underscore (`_`) should be tested or mocked (exception for when
-there's no other way). They are considered private and should only be tested indirectly.
+Any class, method or function beginning with a single underscore (`_`) should NOT be tested or mocked (exception for
+when there's no other way). They are considered private and should only be tested indirectly.
 
 For the test case examples on this section, take into account the following code and files:
 
